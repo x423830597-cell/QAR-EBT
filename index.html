@@ -107,8 +107,61 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 16px 30px;
-      margin-bottom: 32px;
+      margin-bottom: 18px;
       padding: 0 16px;
+    }
+
+    .report-controls {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: center;
+      margin: 0 0 30px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #f8fbff;
+    }
+
+    .control-copy {
+      color: #617188;
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .control-copy b {
+      display: block;
+      color: #111827;
+      font-size: 12px;
+      margin-bottom: 2px;
+    }
+
+    .segmented {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px;
+      border-radius: 999px;
+      background: #eef5fc;
+      border: 1px solid #e1ebf7;
+    }
+
+    .segment {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 58px;
+      height: 26px;
+      border-radius: 999px;
+      color: #6d7f94;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .segment.active {
+      background: var(--blue);
+      color: #fff;
+      box-shadow: 0 4px 10px rgba(75, 134, 247, .22);
     }
 
     .kv small {
@@ -192,6 +245,32 @@
       color: var(--blue);
       font-size: 12px;
       font-weight: 800;
+    }
+
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: -6px 0 16px;
+    }
+
+    .filter-pill {
+      display: inline-flex;
+      align-items: center;
+      height: 26px;
+      padding: 0 10px;
+      border-radius: 999px;
+      border: 1px solid #deebfa;
+      background: #f8fbff;
+      color: #62758c;
+      font-size: 10.5px;
+      font-weight: 800;
+    }
+
+    .filter-pill.active {
+      color: var(--blue-ink);
+      background: #ecf4ff;
+      border-color: #cfe1fb;
     }
 
     .tag {
@@ -593,6 +672,123 @@
       color: var(--blue-ink);
       font-size: 18px;
       margin-bottom: 4px;
+    }
+
+    .ebt-trend-panel {
+      margin-bottom: 18px;
+    }
+
+    .ebt-trend {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .trend-chart {
+      min-height: 232px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fbfdff;
+      padding: 10px 12px;
+    }
+
+    .trend-chart svg {
+      display: block;
+      width: 100%;
+      height: 212px;
+      overflow: visible;
+    }
+
+    .trend-grid {
+      stroke: #e9f0f8;
+      stroke-width: 1;
+    }
+
+    .trend-axis {
+      stroke: #d8e2ee;
+      stroke-width: 1.2;
+    }
+
+    .trend-label {
+      fill: #7b8da0;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .trend-line {
+      fill: none;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .trend-line.procedure { stroke: #33c27f; }
+    .trend-line.manual { stroke: #ff6361; }
+    .trend-line.comm { stroke: #4b86f7; }
+
+    .trend-dot.procedure { fill: #33c27f; }
+    .trend-dot.manual { fill: #ff6361; }
+    .trend-dot.comm { fill: #4b86f7; }
+
+    .trend-legend {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      color: #7b8da0;
+      font-size: 10.5px;
+      font-weight: 800;
+      margin-top: -2px;
+    }
+
+    .trend-legend i {
+      display: inline-block;
+      width: 16px;
+      height: 3px;
+      border-radius: 999px;
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+
+    .trend-legend .green { background: #33c27f; }
+    .trend-legend .red { background: #ff6361; }
+    .trend-legend .blue { background: #4b86f7; }
+
+    .trend-periods {
+      display: grid;
+      gap: 10px;
+    }
+
+    .period-card {
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: #f8fbff;
+      padding: 11px 12px;
+    }
+
+    .period-card b {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      color: #111827;
+      font-size: 12px;
+      margin-bottom: 7px;
+    }
+
+    .period-card b span {
+      color: var(--blue-ink);
+      background: #ecf4ff;
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: 10px;
+    }
+
+    .period-card p {
+      margin: 0;
+      color: #617188;
+      font-size: 10.5px;
+      line-height: 1.55;
     }
 
     .radar-card {
@@ -1245,6 +1441,101 @@
     .subject-performance table th:first-child {
       text-align: left;
     }
+
+    @media (max-width: 760px) {
+      .page {
+        width: 100%;
+        min-height: auto;
+        padding: 26px 10px 16px;
+        background-size: 1000px auto;
+      }
+
+      .hero-art {
+        right: -160px;
+        width: 360px;
+        opacity: .55;
+      }
+
+      .title {
+        padding-left: 16px;
+        height: 102px;
+      }
+
+      h1 {
+        font-size: 23px;
+      }
+
+      .sheet {
+        padding: 18px 12px;
+        border-radius: 12px;
+        min-height: 0;
+      }
+
+      .basic,
+      .metrics,
+      .stage-metrics,
+      .overview-metrics,
+      .overview-panel .overview-metrics {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .report-controls,
+      .two-col,
+      .ebt-chart-row,
+      .competency-combo,
+      .ebt-trend {
+        grid-template-columns: 1fr;
+      }
+
+      .report-controls {
+        align-items: start;
+      }
+
+      .segmented {
+        justify-self: start;
+      }
+
+      .block-summary {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .summary-tag {
+        white-space: normal;
+        height: auto;
+        min-height: 28px;
+        line-height: 1.35;
+        padding-top: 6px;
+        padding-bottom: 6px;
+      }
+
+      .stage-chart {
+        width: 100%;
+      }
+
+      .qar-compare-module,
+      .panel,
+      .ob-large {
+        overflow-x: auto;
+      }
+
+      table {
+        min-width: 560px;
+      }
+
+      .ob-axis-head,
+      .ob-axis-row {
+        grid-template-columns: 52px 20px minmax(280px, 1fr) 20px 52px;
+      }
+
+      .ob-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .final {
+        padding: 14px 16px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1267,13 +1558,27 @@
         <div class="kv"><small>QAR异常记录</small><strong>暂无显著异常</strong></div>
       </div>
 
+      <div class="report-controls">
+        <div class="control-copy"><b>在线筛选</b>报告支持网页链接查看，可按统计周期、课程类型、课号与考核结果筛选；当前展示为近1个月 QAR 与近三期复训 EBT 结果。</div>
+        <div class="segmented" aria-label="QAR统计周期">
+          <span class="segment">1周</span>
+          <span class="segment active">1个月</span>
+        </div>
+      </div>
+
       <section class="block">
         <div class="block-head">
           <div>
             <div class="block-title"><img class="title-icon" src="section-arrow.png" alt="" /><h2>QAR综合分析</h2></div>
           </div>
         </div>
-        <div class="block-summary"><span>聚焦起飞、着陆及个人与群体指标对比，识别参数稳定性、数据完整性和后续复盘重点。</span><span class="summary-tag">5项指标正常</span></div>
+        <div class="block-summary"><span>按所选统计周期提取 QAR 数据，聚焦起飞、着陆及个人与群体指标对比，识别飞行习惯倾向、参数稳定性和后续复盘重点。</span><span class="summary-tag">近1个月 · 5项指标正常</span></div>
+        <div class="filter-row">
+          <span class="filter-pill active">统计周期：1个月</span>
+          <span class="filter-pill">可切换：1周</span>
+          <span class="filter-pill">数据来源：QAR</span>
+          <span class="filter-pill">异常记录：暂无显著异常</span>
+        </div>
 
         <div class="stage-grid">
           <div class="stage-card">
@@ -1426,7 +1731,7 @@
               </table>
             </div>
           </div>
-          <div class="qar-summary"><b>总结分析：</b>根据 QAR 数据统计分析，起飞阶段抬轮速率控制较群体均值偏高 5.46%，仍在标准操作范围内；起飞坡度优于群体表现，偏差为 -28.24%。离地姿态控制较标准值偏低 15.62%，提示存在柔和抬轮倾向。着陆坡度最大值与群体均值存在 171.3% 偏差，但绝对差异未超阈值；接地姿态较标准值偏低 11.85%，符合平稳着陆特征。QAR 系统未触发异常事件告警，所有飞行参数均在安全包线内。</div>
+          <div class="qar-summary"><b>总结分析：</b>根据 QAR 数据统计分析，飞行员在所选周期内呈现较稳定的起飞和着陆习惯。起飞阶段抬轮速率控制较群体均值偏高 5.46%，仍在标准操作范围内；起飞坡度优于群体表现，偏差为 -28.24%。离地姿态控制较标准值偏低 15.62%，提示存在柔和抬轮倾向。着陆坡度最大值与群体均值存在 171.3% 偏差，但绝对差异未超阈值；接地姿态较标准值偏低 11.85%，符合平稳着陆特征。QAR 系统未触发异常事件告警，所有飞行参数均在安全包线内。</div>
         </div>
       </section>
 
@@ -1436,7 +1741,56 @@
             <div class="block-title"><img class="title-icon" src="section-arrow.png" alt="" /><h2>EBT个人训练分析</h2></div>
           </div>
         </div>
-        <div class="block-summary"><span>聚焦检查结果、胜任力维度、正负向OB表现，形成下一周期个性化训练闭环。</span><span class="summary-tag">检查通过率 100%</span></div>
+        <div class="block-summary"><span>按复训课程记录向前提取近三期数据，横向观察能力变化、成长趋势和下一周期个性化训练重点。</span><span class="summary-tag">近三期复训 · 检查通过率 100%</span></div>
+        <div class="filter-row">
+          <span class="filter-pill active">课程类型：检查课</span>
+          <span class="filter-pill">训练课</span>
+          <span class="filter-pill">课号：全部</span>
+          <span class="filter-pill">考核结果：全部</span>
+          <span class="filter-pill">可筛选：不通过</span>
+        </div>
+
+        <div class="panel ebt-trend-panel">
+          <div class="mini-title">近三次复训能力横向比对</div>
+          <div class="ebt-trend">
+            <div class="trend-chart">
+              <svg viewBox="0 0 480 220" role="img" aria-label="近三期复训能力趋势图">
+                <line class="trend-grid" x1="44" y1="32" x2="452" y2="32" />
+                <line class="trend-grid" x1="44" y1="68" x2="452" y2="68" />
+                <line class="trend-grid" x1="44" y1="104" x2="452" y2="104" />
+                <line class="trend-grid" x1="44" y1="140" x2="452" y2="140" />
+                <line class="trend-grid" x1="44" y1="176" x2="452" y2="176" />
+                <line class="trend-axis" x1="44" y1="176" x2="452" y2="176" />
+                <text class="trend-label" x="30" y="36" text-anchor="end">5</text>
+                <text class="trend-label" x="30" y="72" text-anchor="end">4</text>
+                <text class="trend-label" x="30" y="108" text-anchor="end">3</text>
+                <text class="trend-label" x="30" y="144" text-anchor="end">2</text>
+                <text class="trend-label" x="30" y="180" text-anchor="end">1</text>
+                <text class="trend-label" x="86" y="202" text-anchor="middle">2025-03</text>
+                <text class="trend-label" x="248" y="202" text-anchor="middle">2025-09</text>
+                <text class="trend-label" x="410" y="202" text-anchor="middle">2026-03</text>
+                <polyline class="trend-line procedure" points="86,104 248,86 410,68" />
+                <polyline class="trend-line comm" points="86,122 248,104 410,86" />
+                <polyline class="trend-line manual" points="86,68 248,104 410,140" />
+                <circle class="trend-dot procedure" cx="86" cy="104" r="4" />
+                <circle class="trend-dot procedure" cx="248" cy="86" r="4" />
+                <circle class="trend-dot procedure" cx="410" cy="68" r="4" />
+                <circle class="trend-dot comm" cx="86" cy="122" r="4" />
+                <circle class="trend-dot comm" cx="248" cy="104" r="4" />
+                <circle class="trend-dot comm" cx="410" cy="86" r="4" />
+                <circle class="trend-dot manual" cx="86" cy="68" r="4" />
+                <circle class="trend-dot manual" cx="248" cy="104" r="4" />
+                <circle class="trend-dot manual" cx="410" cy="140" r="4" />
+              </svg>
+              <div class="trend-legend"><span><i class="green"></i>程序应用</span><span><i class="blue"></i>沟通</span><span><i class="red"></i>人工航径管理</span></div>
+            </div>
+            <div class="trend-periods">
+              <div class="period-card"><b>第1期复训 <span>2025-03</span></b><p>程序应用与沟通处于合格水平，人工航径管理表现稳定，作为后续变化对比基线。</p></div>
+              <div class="period-card"><b>第2期复训 <span>2025-09</span></b><p>程序应用有所提升，沟通表现改善；人工航径管理出现波动，需结合 OB 记录复盘。</p></div>
+              <div class="period-card"><b>第3期复训 <span>2026-03</span></b><p>程序应用和沟通延续提升趋势，人工航径管理负向 OB 增多，应作为下一周期训练重点。</p></div>
+            </div>
+          </div>
+        </div>
 
         <div class="ebt-chart-row">
           <div class="panel">
