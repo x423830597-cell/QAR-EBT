@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>南航飞行员个人分析报告 UI</title>
+  <style>
+    :root {
+      --csn-blue: #0066b3;
+      --deep: #003e7e;
+      --cyan: #00a7d8;
+      --red: #d71920;
+      --green: #17a65b;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d9e7f5;
+      --panel: #ffffff;
+      --soft: #f2f8ff;
+      --warm: #fff7ed;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #e9f2fb;
+      font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+      color: var(--ink);
+    }
+
+    .canvas {
+      width: 1440px;
+      min-height: 2380px;
+      margin: 0 auto;
+      padding: 34px;
+      background:
+        linear-gradient(180deg, #eaf4ff 0, #f7fbff 320px, #eef6fd 100%);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      height: 330px;
+      border-radius: 18px;
+      padding: 42px 50px;
+      color: #fff;
+      background:
+        linear-gradient(118deg, rgba(0, 62, 126, .98), rgba(0, 102, 179, .9) 55%, rgba(0, 167, 216, .84)),
+        linear-gradient(180deg, #0066b3, #003e7e);
+      box-shadow: 0 22px 45px rgba(0, 62, 126, .18);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: 54px;
+      top: 45px;
+      width: 405px;
+      height: 190px;
+      border: 3px solid rgba(255,255,255,.22);
+      border-left: 0;
+      transform: skewX(-18deg);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: .02em;
+    }
+
+    .mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 11px;
+      background: #fff;
+      color: var(--csn-blue);
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+    }
+
+    .hero h1 {
+      margin: 32px 0 14px;
+      font-size: 50px;
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .hero .sub {
+      font-size: 22px;
+      opacity: .9;
+      font-weight: 600;
+    }
+
+    .hero-meta {
+      position: absolute;
+      left: 50px;
+      right: 50px;
+      bottom: 32px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+    }
+
+    .hero-meta .item {
+      border: 1px solid rgba(255,255,255,.26);
+      background: rgba(255,255,255,.12);
+      border-radius: 12px;
+      padding: 12px 14px;
+      backdrop-filter: blur(8px);
+    }
+
+    .label {
+      display: block;
+      color: rgba(255,255,255,.68);
+      font-size: 13px;
+      margin-bottom: 5px;
+    }
+
+    .value {
+      display: block;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .grid {
+      display: grid;
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .cols-4 { grid-template-columns: repeat(4, 1fr); }
+    .cols-3 { grid-template-columns: 1.1fr 1fr 1fr; }
+    .cols-2 { grid-template-columns: 1fr 1fr; }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 12px 28px rgba(0, 62, 126, .08);
+    }
+
+    .metric {
+      min-height: 130px;
+      padding: 24px 26px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .metric::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 5px;
+      background: var(--csn-blue);
+    }
+
+    .metric small {
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 12px;
+      font-size: 34px;
+      line-height: 1;
+      color: var(--deep);
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .section {
+      padding: 26px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-title h2 {
+      margin: 0;
+      color: var(--deep);
+      font-size: 26px;
+      letter-spacing: 0;
+    }
+
+    .pill {
+      height: 34px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 14px;
+      border-radius: 999px;
+      background: #eaf4ff;
+      color: var(--csn-blue);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .summary-card {
+      padding: 18px;
+      border-radius: 12px;
+      background: #f8fbff;
+      border: 1px solid #e5eff9;
+    }
+
+    .summary-card h3 {
+      margin: 0 0 10px;
+      font-size: 17px;
+      color: var(--deep);
+    }
+
+    .summary-card p {
+      margin: 0;
+      color: #344054;
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    .chart-card {
+      padding: 20px;
+      overflow: hidden;
+    }
+
+    .chart-card img {
+      display: block;
+      width: 100%;
+      height: 270px;
+      object-fit: contain;
+      object-position: center;
+      background: #fff;
+      border-radius: 10px;
+    }
+
+    .comparison {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+    }
+
+    .comparison th {
+      text-align: left;
+      color: var(--deep);
+      background: #eaf4ff;
+      padding: 13px 14px;
+      font-size: 14px;
+    }
+
+    .comparison td {
+      border-bottom: 1px solid #edf2f7;
+      padding: 12px 14px;
+      color: #344054;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #067647;
+      background: #ecfdf3;
+      border: 1px solid #abefc6;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .bars {
+      display: grid;
+      gap: 17px;
+      padding: 8px 0 0;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 170px 1fr 72px;
+      gap: 16px;
+      align-items: center;
+      font-size: 15px;
+    }
+
+    .bar-track {
+      height: 18px;
+      border-radius: 999px;
+      background: #edf4fb;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--csn-blue), var(--cyan));
+    }
+
+    .bar-fill.red { background: linear-gradient(90deg, #ff7262, var(--red)); }
+    .bar-fill.green { background: linear-gradient(90deg, #39d98a, var(--green)); }
+
+    .ebt-panel {
+      display: grid;
+      grid-template-columns: .88fr 1.12fr;
+      gap: 22px;
+    }
+
+    .pass-ring {
+      height: 360px;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at center, #fff 0 31%, transparent 32%),
+        conic-gradient(var(--green) 0 100%, #eef4f8 0);
+      border-radius: 18px;
+      border: 1px solid #dff3e8;
+    }
+
+    .pass-ring .inside {
+      text-align: center;
+    }
+
+    .pass-ring strong {
+      color: var(--green);
+      font-size: 64px;
+      line-height: 1;
+    }
+
+    .pass-ring span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .competency {
+      display: grid;
+      gap: 12px;
+    }
+
+    .competency-row {
+      display: grid;
+      grid-template-columns: 150px 1fr 44px 44px;
+      gap: 12px;
+      align-items: center;
+      color: #344054;
+      font-size: 14px;
+    }
+
+    .split-track {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      height: 16px;
+      background: #edf4fb;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .neg, .pos { height: 100%; }
+    .neg { justify-self: end; background: #f04438; }
+    .pos { background: #12b76a; }
+
+    .ob-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .ob-box {
+      padding: 18px;
+      border-radius: 12px;
+      border: 1px solid #eef2f6;
+      background: #fbfdff;
+    }
+
+    .ob-box.negative { background: #fff7f7; border-color: #ffd6d2; }
+    .ob-box.positive { background: #f4fff8; border-color: #c9f4da; }
+
+    .ob-box h3 {
+      margin: 0 0 12px;
+      font-size: 18px;
+      color: var(--deep);
+    }
+
+    .ob {
+      display: grid;
+      grid-template-columns: 72px 1fr 28px;
+      gap: 10px;
+      padding: 10px 0;
+      border-top: 1px solid rgba(0, 0, 0, .05);
+      font-size: 14px;
+      color: #344054;
+    }
+
+    .ob code {
+      color: var(--deep);
+      font-weight: 800;
+      font-family: inherit;
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .action {
+      padding: 18px;
+      border-radius: 12px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+    }
+
+    .action b {
+      display: block;
+      color: var(--deep);
+      margin-bottom: 9px;
+      font-size: 16px;
+    }
+
+    .action p {
+      margin: 0;
+      color: #475467;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 28px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <main class="canvas">
+    <section class="hero">
+      <div class="brand"><div class="mark">CZ</div><span>中国南方航空</span></div>
+      <h1>飞行员个人技术能力分析报告</h1>
+      <div class="sub">QAR运行品质分析 · EBT训练与胜任力分析</div>
+      <div class="hero-meta">
+        <div class="item"><span class="label">报告对象</span><span class="value">张三</span></div>
+        <div class="item"><span class="label">分析周期</span><span class="value">2026年03月</span></div>
+        <div class="item"><span class="label">报告日期</span><span class="value">2026-05-28</span></div>
+        <div class="item"><span class="label">机型</span><span class="value">B737-800</span></div>
+        <div class="item"><span class="label">报告结构</span><span class="value">QAR + EBT</span></div>
+      </div>
+    </section>
+
+    <section class="grid cols-4">
+      <div class="card metric"><small>检查通过率</small><strong>100%</strong><span>2项检查全部通过</span></div>
+      <div class="card metric"><small>QAR异常事件</small><strong>0</strong><span>起飞与着陆暂无异常记录</span></div>
+      <div class="card metric"><small>起飞抬轮变化率</small><strong>2.568</strong><span>°/s，稳定性良好</span></div>
+      <div class="card metric"><small>着陆接地姿态</small><strong>2.988°</strong><span>符合稳定接地表现</span></div>
+    </section>
+
+    <section class="card section grid" style="gap: 0;">
+      <div class="section-title">
+        <h2>QAR运行品质分析</h2>
+        <span class="pill">起飞 · 着陆 · 群体对比</span>
+      </div>
+      <div class="summary">
+        <div class="summary-card">
+          <h3>起飞阶段</h3>
+          <p>抬轮速率均值 2.5684°/s，标准差 0.2410°/s，整体稳定。航向偏差字段存在缺失，需核查QAR参数采集。</p>
+        </div>
+        <div class="summary-card">
+          <h3>着陆阶段</h3>
+          <p>着陆坡度最大值标准差 2.0618°，提示侧风或横侧向修正中存在离散性。接地姿态均值 2.9883°。</p>
+        </div>
+        <div class="summary-card">
+          <h3>个人与群体</h3>
+          <p>当前对比项均标记为正常。离地俯仰角较群体低 15.62%，表现为相对柔和的抬轮倾向。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid cols-2">
+      <div class="card chart-card">
+        <div class="section-title"><h2>起飞阶段月度指标</h2><span class="pill">近6个月</span></div>
+        <img src="word/media/image1.png" alt="起飞阶段月度指标" />
+      </div>
+      <div class="card chart-card">
+        <div class="section-title"><h2>着陆阶段月度指标</h2><span class="pill">近6个月</span></div>
+        <img src="word/media/image2.png" alt="着陆阶段月度指标" />
+      </div>
+    </section>
+
+    <section class="card section">
+      <div class="section-title">
+        <h2>个人与群体QAR指标对比</h2>
+        <span class="pill">5项均正常</span>
+      </div>
+      <div class="grid cols-2" style="margin-top: 0;">
+        <table class="comparison">
+          <thead><tr><th>指标</th><th>个人均值</th><th>群体均值</th><th>偏差</th><th>状态</th></tr></thead>
+          <tbody>
+            <tr><td>起飞抬轮变化率</td><td>2.5684</td><td>2.4354</td><td>5.46%</td><td><span class="status">正常</span></td></tr>
+            <tr><td>起飞坡度</td><td>-0.2197</td><td>-0.3062</td><td>-28.24%</td><td><span class="status">正常</span></td></tr>
+            <tr><td>离地俯仰角</td><td>5.1416</td><td>6.0936</td><td>-15.62%</td><td><span class="status">正常</span></td></tr>
+            <tr><td>着陆坡度最大值</td><td>0.1318</td><td>-0.1849</td><td>-171.3%</td><td><span class="status">正常</span></td></tr>
+            <tr><td>着陆接地姿态</td><td>2.9883</td><td>3.3902</td><td>-11.85%</td><td><span class="status">正常</span></td></tr>
+          </tbody>
+        </table>
+        <div class="bars">
+          <div class="bar-row"><span>起飞抬轮变化率</span><div class="bar-track"><div class="bar-fill green" style="width: 28%;"></div></div><b>5.46%</b></div>
+          <div class="bar-row"><span>起飞坡度</span><div class="bar-track"><div class="bar-fill" style="width: 45%;"></div></div><b>-28.24%</b></div>
+          <div class="bar-row"><span>离地俯仰角</span><div class="bar-track"><div class="bar-fill" style="width: 35%;"></div></div><b>-15.62%</b></div>
+          <div class="bar-row"><span>着陆坡度最大值</span><div class="bar-track"><div class="bar-fill red" style="width: 88%;"></div></div><b>-171.3%</b></div>
+          <div class="bar-row"><span>着陆接地姿态</span><div class="bar-track"><div class="bar-fill" style="width: 31%;"></div></div><b>-11.85%</b></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card section">
+      <div class="section-title">
+        <h2>EBT训练与胜任力分析</h2>
+        <span class="pill">检查通过 · 胜任力画像 · OB表现</span>
+      </div>
+      <div class="ebt-panel">
+        <div>
+          <div class="pass-ring"><div class="inside"><strong>100%</strong><span>检查通过率</span></div></div>
+          <div class="summary-card" style="margin-top: 18px;">
+            <h3>训练概况</h3>
+            <p>统计期内完成2次检查类科目，均通过。暂无训练类科目数据，当前周期以资格认证与保持为主。</p>
+          </div>
+        </div>
+        <div class="competency">
+          <div class="competency-row"><b>知识应用</b><div class="split-track"><div></div><div></div></div><span>0</span><span>0</span></div>
+          <div class="competency-row"><b>程序应用</b><div class="split-track"><div></div><div class="pos" style="width: 70%;"></div></div><span>+3</span><span>0</span></div>
+          <div class="competency-row"><b>沟通</b><div class="split-track"><div class="neg" style="width: 45%;"></div><div class="pos" style="width: 45%;"></div></div><span>+2</span><span>-2</span></div>
+          <div class="competency-row"><b>人工航径管理</b><div class="split-track"><div class="neg" style="width: 100%;"></div><div></div></div><span>0</span><span>-5</span></div>
+          <div class="competency-row"><b>问题解决与决策</b><div class="split-track"><div></div><div class="pos" style="width: 30%;"></div></div><span>+1</span><span>0</span></div>
+          <div class="competency-row"><b>情景意识</b><div class="split-track"><div></div><div class="pos" style="width: 48%;"></div></div><span>+2</span><span>0</span></div>
+          <div class="competency-row"><b>工作负荷管理</b><div class="split-track"><div></div><div class="pos" style="width: 30%;"></div></div><span>+1</span><span>0</span></div>
+          <div class="summary-card" style="margin-top: 12px;">
+            <h3>胜任力判断</h3>
+            <p>优势体现在程序应用和情景意识；人工航径管理负向记录较集中，沟通维度正负向并存，后续需结合运行情景持续观察。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ob-list">
+      <div class="ob-box negative">
+        <h3>负向OB TOP5</h3>
+        <div class="ob"><code>FPM.2</code><span>监控并识别与预计飞行航径的偏差，并采取适当措施</span><b>2</b></div>
+        <div class="ob"><code>FPM.3</code><span>使用飞机姿态、速度和推力之间的关系</span><b>2</b></div>
+        <div class="ob"><code>COM.2</code><span>恰当选择沟通的内容、时机、方式和对象</span><b>1</b></div>
+        <div class="ob"><code>COM.7</code><span>适当升级沟通以解决已发现的偏差</span><b>1</b></div>
+        <div class="ob"><code>FPM.1</code><span>根据情况准确、平稳地人工控制飞机</span><b>1</b></div>
+      </div>
+      <div class="ob-box positive">
+        <h3>正向OB TOP5</h3>
+        <div class="ob"><code>PRO.2</code><span>及时应用相关的运行规定、程序和技术</span><b>2</b></div>
+        <div class="ob"><code>COM.3</code><span>清晰、准确、简洁地传递信息</span><b>1</b></div>
+        <div class="ob"><code>COM.9</code><span>遵守标准的无线电通话用语和程序</span><b>1</b></div>
+        <div class="ob"><code>PRO.3</code><span>遵循SOP，除非更高安全性指示需适当偏离</span><b>1</b></div>
+        <div class="ob"><code>SAW.4</code><span>验证信息准确性并检查过失误差</span><b>1</b></div>
+      </div>
+    </section>
+
+    <section class="card section">
+      <div class="section-title">
+        <h2>QAR × EBT 个性化训练闭环</h2>
+        <span class="pill">下一周期建议</span>
+      </div>
+      <div class="action-grid">
+        <div class="action"><b>侧风着陆训练</b><p>围绕着陆坡度最大值离散性，强化横侧向修正、稳定进近和接地前姿态保持。</p></div>
+        <div class="action"><b>人工航径管理</b><p>将FPM负向OB与QAR航迹/姿态指标联动复盘，关注偏差识别和修正动作。</p></div>
+        <div class="action"><b>沟通闭环</b><p>训练复杂情景中的沟通对象、时机、内容和偏差升级，提升CRM协作质量。</p></div>
+        <div class="action"><b>数据质量复核</b><p>对航向偏差、俯仰变化率等缺失字段建立月度校验，保障QAR趋势判断可靠。</p></div>
+      </div>
+    </section>
+
+    <div class="footer-note">内部分析资料 · 中国南方航空飞行员个人技术能力分析 UI</div>
+  </main>
+</body>
+</html>

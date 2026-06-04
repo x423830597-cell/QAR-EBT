@@ -1,0 +1,4 @@
+preview/
+*.backup.html
+*.claude-*-backup.html
+.DS_Store
