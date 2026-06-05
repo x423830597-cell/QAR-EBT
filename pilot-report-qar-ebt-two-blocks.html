@@ -5093,15 +5093,52 @@
       });
     }
 
+    const dimensionFrame = {
+      viewWidth: 1214,
+      plotLeft: 54,
+      plotRight: 1160,
+      yLabelX: 44,
+      aprilX: 78,
+      mayX: 726
+    };
+
+    function stretchDimensionChartFrame(card) {
+      const svg = card.querySelector("svg");
+      if (!svg || svg.dataset.frameStretched === "true") return;
+      svg.setAttribute("viewBox", `0 0 ${dimensionFrame.viewWidth} 220`);
+      svg.querySelectorAll(".dimension-grid-line").forEach((line) => {
+        line.setAttribute("x1", dimensionFrame.plotLeft);
+        line.setAttribute("x2", dimensionFrame.plotRight);
+      });
+      svg.querySelectorAll(".dimension-axis").forEach((line) => {
+        const vertical = line.getAttribute("x1") === line.getAttribute("x2");
+        if (vertical) {
+          line.setAttribute("x1", dimensionFrame.plotLeft);
+          line.setAttribute("x2", dimensionFrame.plotLeft);
+        } else {
+          line.setAttribute("x1", dimensionFrame.plotLeft);
+          line.setAttribute("x2", dimensionFrame.plotRight);
+        }
+      });
+      svg.querySelectorAll(".dimension-label").forEach((label) => {
+        const text = label.textContent.trim();
+        if (/^[0-5]$/.test(text)) label.setAttribute("x", dimensionFrame.yLabelX);
+        if (text === "2026-04") label.setAttribute("x", dimensionFrame.aprilX);
+        if (text === "2026-05") label.setAttribute("x", dimensionFrame.mayX);
+      });
+      svg.dataset.frameStretched = "true";
+    }
+
     function tightenDimensionChartSpacing(card) {
       if (card.dataset.spacingTightened === "true") return;
+      stretchDimensionChartFrame(card);
       const xMap = new Map([
-        ["96", "54"],
-        ["204", "190"],
-        ["332", "326"],
-        ["454", "462"],
-        ["590", "598"],
-        ["704", "734"]
+        ["96", "78"],
+        ["204", "294"],
+        ["332", "510"],
+        ["454", "726"],
+        ["590", "942"],
+        ["704", "1158"]
       ]);
       const mapX = (value) => xMap.get(String(Math.round(Number(value)))) || value;
       card.querySelectorAll(".dimension-line").forEach((line) => {
@@ -5141,12 +5178,12 @@
 
       const dots = Array.from(trainGroup.querySelectorAll("circle"));
       const labels = Array.from(trainGroup.querySelectorAll(".dimension-point-label"));
-      const pointXs = [54, 190, 462, 734];
+      const pointXs = [78, 438, 798, 1158];
       const labelLayouts = [
-        { x: 54, anchor: "middle" },
-        { x: 190, anchor: "middle" },
-        { x: 462, anchor: "middle" },
-        { x: 734, anchor: "middle" }
+        { x: 78, anchor: "middle" },
+        { x: 438, anchor: "middle" },
+        { x: 798, anchor: "middle" },
+        { x: 1158, anchor: "middle" }
       ];
 
       setOriginalAttribute(trainLine, "points", trainLine.getAttribute("points"));
@@ -5280,9 +5317,8 @@
     function setDimensionPointLayout(dot, label, x) {
       dot.setAttribute("cx", x);
       if (!label) return;
-      const useEnd = x >= 700;
-      setPointLabelX(label, useEnd ? x - 10 : x + 10);
-      label.setAttribute("text-anchor", useEnd ? "end" : "start");
+      setPointLabelX(label, x);
+      label.setAttribute("text-anchor", "middle");
     }
 
     function resetDimensionPointLayout(card) {
@@ -5311,8 +5347,8 @@
     }
 
     const dayMs = 24 * 60 * 60 * 1000;
-    const dayAxisLeft = 54;
-    const dayAxisRight = 734;
+    const dayAxisLeft = 78;
+    const dayAxisRight = 1158;
 
     function dateToAxisX(date, range) {
       if (!date || !range?.start || !range?.end) return null;
@@ -5332,11 +5368,11 @@
         return;
       }
 
-      const leadingXs = [54, 190, 326, 462, 598, 734];
+      const leadingXs = [78, 294, 510, 726, 942, 1158];
       const visibleDots = getVisibleDimensionDots(card);
       const averageMonthPoints = range?.axisGranularity === "month-day";
-      const averageLeft = 54;
-      const averageRight = 734;
+      const averageLeft = 78;
+      const averageRight = 1158;
       const layoutByDot = new Map();
       visibleDots.forEach((dot, index) => {
         const rangeX = averageMonthPoints
