@@ -5426,7 +5426,7 @@
       const trainActive = card.querySelector('[data-dimension-mode="train"]')?.classList.contains("active") ?? true;
       card.classList.toggle("show-check-only", checkActive && !trainActive);
       card.classList.toggle("show-train-only", trainActive && !checkActive);
-      updateTrainOnlyAlignment(card, trainActive && !checkActive);
+      if (!card.classList.contains("day-scale")) updateTrainOnlyAlignment(card, trainActive && !checkActive);
     }
 
     function parseDateValue(value, fallbackDay = 1) {
@@ -5526,8 +5526,11 @@
       const frame = getDimensionFrame();
       const useAxisPosition = card.classList.contains("day-scale");
       visibleDots.forEach((dot, index) => {
+        const axisX = currentEbtRange?.axisGranularity && currentEbtRange.axisGranularity !== "month-day"
+          ? dateToAxisX(parseDateValue(dot.dataset.date), currentEbtRange)
+          : null;
         const x = useAxisPosition
-          ? Number(dot.getAttribute("cx") || 0)
+          ? axisX ?? Number(dot.getAttribute("cx") || 0)
           : frame.pointXs[index] ?? frame.pointXs[frame.pointXs.length - 1];
         const y = Number(dot.getAttribute("cy") || 176);
         const pointType = dot.dataset.pointType || "train";
@@ -5664,7 +5667,6 @@
         delete card.dataset.spacingTightened;
         delete card.dataset.originalLayoutStored;
         compactDimensionPointLayout(card, dayScale, range);
-        delete card.dataset.originalLayoutStored;
         delete card.dataset.spacingTightened;
         tightenDimensionChartSpacing(card);
         updateDimensionCardMode(card);
@@ -5675,6 +5677,17 @@
     function refreshDimensionChartsForViewport() {
       const activeRange = currentEbtRange || getPresetRange("year");
       compactDimensionCharts(isDayScaleRange(activeRange), activeRange);
+    }
+
+    let dimensionRefreshFrame = null;
+    function queueDimensionChartRefresh() {
+      if (dimensionRefreshFrame !== null) cancelAnimationFrame(dimensionRefreshFrame);
+      dimensionRefreshFrame = requestAnimationFrame(() => {
+        dimensionRefreshFrame = requestAnimationFrame(() => {
+          dimensionRefreshFrame = null;
+          refreshDimensionChartsForViewport();
+        });
+      });
     }
 
     function getSelectedSubjectTargets() {
@@ -5923,6 +5936,7 @@
         setDimensionLinePoints(card);
       });
       applySelectedSubjectsToDimensionCharts(range);
+      compactDimensionCharts(dayScale, range);
     }
 
     function renderCompetencyDetailCards() {
@@ -6000,6 +6014,7 @@
         button.classList.add("active");
         setEbtTimeLabel(button.textContent.trim());
         applyEbtTimeFilter(getPresetRange(button.dataset.ebtTime || "year"));
+        queueDimensionChartRefresh();
         ebtTimeFilter?.classList.remove("open");
         ebtTimeToggle?.setAttribute("aria-expanded", "false");
       });
@@ -6014,6 +6029,7 @@
       document.querySelectorAll("[data-ebt-time]").forEach((item) => item.classList.remove("active"));
       applyEbtTimeFilter({ start: start <= end ? start : end, end: start <= end ? end : start });
       setEbtTimeLabel(`${ebtStartInput.value} 至 ${ebtEndInput.value}`);
+      queueDimensionChartRefresh();
     }
     ebtStartInput?.addEventListener("change", applyCustomEbtRange);
     ebtEndInput?.addEventListener("change", applyCustomEbtRange);
@@ -6031,6 +6047,7 @@
           setDimensionLinePoints(card);
           const activeRange = currentEbtRange || getPresetRange("year");
           compactDimensionCharts(isDayScaleRange(activeRange), activeRange);
+          queueDimensionChartRefresh();
         });
       });
     });
@@ -6051,6 +6068,7 @@
         if (button.classList.contains("active") && activeItems.length === 1) return;
         button.classList.toggle("active");
         applySelectedSubjectsToDimensionCharts(currentEbtRange || getPresetRange("year"));
+        queueDimensionChartRefresh();
       });
     });
 
