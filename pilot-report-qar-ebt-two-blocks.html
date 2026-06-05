@@ -5346,18 +5346,18 @@
       const frame = getDimensionFrame();
       const frameKey = String(frame.viewWidth);
       if (card.dataset.spacingTightened === frameKey) return;
-      const xMap = new Map([
-        ["96", String(frame.pointXs[0])],
-        ["204", String(frame.pointXs[1])],
-        ["332", String(frame.pointXs[2])],
-        ["454", String(frame.pointXs[3])],
-        ["590", String(frame.pointXs[4])],
-        ["704", String(frame.pointXs[5])]
-      ]);
-      const mapX = (value) => xMap.get(String(Math.round(Number(value)))) || value;
-      card.querySelectorAll(".dimension-click-point").forEach((dot) => {
-        if (!dot.dataset.baseCx) dot.dataset.baseCx = dot.getAttribute("cx");
-        dot.setAttribute("cx", mapX(dot.dataset.baseCx));
+      if (card.classList.contains("day-scale")) {
+        card.dataset.spacingTightened = frameKey;
+        return;
+      }
+      const orderedDots = Array.from(card.querySelectorAll(".dimension-click-point"))
+        .sort((a, b) => {
+          const aDate = parseDateValue(a.dataset.date)?.getTime() || 0;
+          const bDate = parseDateValue(b.dataset.date)?.getTime() || 0;
+          return aDate - bDate;
+        });
+      orderedDots.forEach((dot, index) => {
+        dot.setAttribute("cx", frame.pointXs[index] ?? frame.pointXs[frame.pointXs.length - 1]);
       });
       card.querySelectorAll("[data-dimension-series]").forEach((group) => {
         const dots = Array.from(group.querySelectorAll(".dimension-click-point"));
@@ -5523,8 +5523,12 @@
       const group = document.createElementNS(svgNamespace, "g");
       group.classList.add("dimension-mobile-bars");
       const barWidth = Math.max(22, Math.min(38, 240 / visibleDots.length));
-      visibleDots.forEach((dot) => {
-        const x = Number(dot.getAttribute("cx") || 0);
+      const frame = getDimensionFrame();
+      const useAxisPosition = card.classList.contains("day-scale");
+      visibleDots.forEach((dot, index) => {
+        const x = useAxisPosition
+          ? Number(dot.getAttribute("cx") || 0)
+          : frame.pointXs[index] ?? frame.pointXs[frame.pointXs.length - 1];
         const y = Number(dot.getAttribute("cy") || 176);
         const pointType = dot.dataset.pointType || "train";
         const color = pointType === "check" ? "#4b86f7" : "#33c27f";
@@ -5658,9 +5662,12 @@
     function compactDimensionCharts(dayScale, range) {
       document.querySelectorAll(".dimension-chart-card").forEach((card) => {
         delete card.dataset.spacingTightened;
+        delete card.dataset.originalLayoutStored;
+        compactDimensionPointLayout(card, dayScale, range);
+        delete card.dataset.originalLayoutStored;
+        delete card.dataset.spacingTightened;
         tightenDimensionChartSpacing(card);
         updateDimensionCardMode(card);
-        compactDimensionPointLayout(card, dayScale, range);
         renderMobileDimensionBars(card);
       });
     }
