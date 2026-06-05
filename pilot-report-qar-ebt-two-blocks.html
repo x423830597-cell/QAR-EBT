@@ -1545,16 +1545,16 @@
 
     .day-axis text {
       fill: #6f83a0;
-      font-size: 9.5px;
+      font-size: 10px;
       font-weight: 800;
     }
 
     .day-axis.dense text {
-      font-size: 7px;
+      font-size: 10px;
     }
 
     .day-axis.hour-scale text {
-      font-size: 7.5px;
+      font-size: 10px;
     }
 
     .dimension-card-head {
@@ -1644,7 +1644,7 @@
 
     .dimension-point-label {
       fill: #34455c;
-      font-size: 9.5px;
+      font-size: 10px;
       font-weight: 400;
     }
 
@@ -1700,7 +1700,7 @@
 
     .dimension-label {
       fill: #7b8da0;
-      font-size: 9px;
+      font-size: 10px;
       font-weight: 800;
     }
 
@@ -3513,7 +3513,7 @@
       }
 
       .dimension-point-label {
-        font-size: 9px;
+        font-size: 10px;
       }
 
       .dimension-point-modal-summary {
@@ -5096,12 +5096,12 @@
     function tightenDimensionChartSpacing(card) {
       if (card.dataset.spacingTightened === "true") return;
       const xMap = new Map([
-        ["96", "24"],
-        ["204", "166"],
-        ["332", "314"],
-        ["454", "458"],
-        ["590", "612"],
-        ["704", "748"]
+        ["96", "54"],
+        ["204", "190"],
+        ["332", "326"],
+        ["454", "462"],
+        ["590", "598"],
+        ["704", "734"]
       ]);
       const mapX = (value) => xMap.get(String(Math.round(Number(value)))) || value;
       card.querySelectorAll(".dimension-line").forEach((line) => {
@@ -5141,12 +5141,12 @@
 
       const dots = Array.from(trainGroup.querySelectorAll("circle"));
       const labels = Array.from(trainGroup.querySelectorAll(".dimension-point-label"));
-      const pointXs = [80, 190, 454, 604];
+      const pointXs = [54, 190, 462, 734];
       const labelLayouts = [
-        { x: 70, anchor: "end" },
-        { x: 202, anchor: "start" },
-        { x: 444, anchor: "end" },
-        { x: 616, anchor: "start" }
+        { x: 54, anchor: "middle" },
+        { x: 190, anchor: "middle" },
+        { x: 462, anchor: "middle" },
+        { x: 734, anchor: "middle" }
       ];
 
       setOriginalAttribute(trainLine, "points", trainLine.getAttribute("points"));
@@ -5311,8 +5311,8 @@
     }
 
     const dayMs = 24 * 60 * 60 * 1000;
-    const dayAxisLeft = 34;
-    const dayAxisRight = 760;
+    const dayAxisLeft = 54;
+    const dayAxisRight = 734;
 
     function dateToAxisX(date, range) {
       if (!date || !range?.start || !range?.end) return null;
@@ -5332,11 +5332,11 @@
         return;
       }
 
-      const leadingXs = [80, 190, 320, 454, 604, 720];
+      const leadingXs = [54, 190, 326, 462, 598, 734];
       const visibleDots = getVisibleDimensionDots(card);
       const averageMonthPoints = range?.axisGranularity === "month-day";
-      const averageLeft = 86;
-      const averageRight = 718;
+      const averageLeft = 54;
+      const averageRight = 734;
       const layoutByDot = new Map();
       visibleDots.forEach((dot, index) => {
         const rangeX = averageMonthPoints
