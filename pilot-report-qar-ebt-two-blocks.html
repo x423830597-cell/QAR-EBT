@@ -884,6 +884,11 @@
       line-height: 1.3;
     }
 
+    .qar-compare-card-head .status {
+      font-size: 13px;
+      line-height: 1.25;
+    }
+
     .qar-compare-values {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2451,14 +2456,14 @@
     .check-subject-item::before {
       content: "";
       position: absolute;
-      top: 15px;
-      right: 16px;
+      top: 16px;
+      right: 15px;
       z-index: 1;
       display: none;
-      width: 6px;
-      height: 3px;
-      border-left: 1.6px solid #fff;
-      border-bottom: 1.6px solid #fff;
+      width: 7px;
+      height: 4px;
+      border-left: 1.8px solid #fff;
+      border-bottom: 1.8px solid #fff;
       transform: rotate(-45deg);
     }
 
@@ -5288,9 +5293,10 @@
     }
 
     function tightenDimensionChartSpacing(card) {
-      if (card.dataset.spacingTightened === "true") return;
       stretchDimensionChartFrame(card);
       const frame = getDimensionFrame();
+      const frameKey = String(frame.viewWidth);
+      if (card.dataset.spacingTightened === frameKey) return;
       const xMap = new Map([
         ["96", String(frame.pointXs[0])],
         ["204", String(frame.pointXs[1])],
@@ -5300,15 +5306,9 @@
         ["704", String(frame.pointXs[5])]
       ]);
       const mapX = (value) => xMap.get(String(Math.round(Number(value)))) || value;
-      card.querySelectorAll(".dimension-line").forEach((line) => {
-        const points = (line.getAttribute("points") || "").split(/\s+/).filter(Boolean).map((point) => {
-          const [x, y] = point.split(",");
-          return `${mapX(x)},${y}`;
-        }).join(" ");
-        line.setAttribute("points", points);
-      });
       card.querySelectorAll(".dimension-click-point").forEach((dot) => {
-        dot.setAttribute("cx", mapX(dot.getAttribute("cx")));
+        if (!dot.dataset.baseCx) dot.dataset.baseCx = dot.getAttribute("cx");
+        dot.setAttribute("cx", mapX(dot.dataset.baseCx));
       });
       card.querySelectorAll("[data-dimension-series]").forEach((group) => {
         const dots = Array.from(group.querySelectorAll(".dimension-click-point"));
@@ -5322,7 +5322,8 @@
           allTspans.forEach((t) => t.setAttribute("dy", "-12"));
         });
       });
-      card.dataset.spacingTightened = "true";
+      setDimensionLinePoints(card);
+      card.dataset.spacingTightened = frameKey;
     }
 
     function setOriginalAttribute(element, name, value) {
@@ -5607,9 +5608,17 @@
 
     function compactDimensionCharts(dayScale, range) {
       document.querySelectorAll(".dimension-chart-card").forEach((card) => {
+        delete card.dataset.spacingTightened;
+        tightenDimensionChartSpacing(card);
+        updateDimensionCardMode(card);
         compactDimensionPointLayout(card, dayScale, range);
         renderMobileDimensionBars(card);
       });
+    }
+
+    function refreshDimensionChartsForViewport() {
+      const activeRange = currentEbtRange || getPresetRange("year");
+      compactDimensionCharts(isDayScaleRange(activeRange), activeRange);
     }
 
     function getSelectedSubjectTargets() {
@@ -5971,6 +5980,14 @@
     });
 
     applyEbtTimeFilter(getPresetRange("year"));
+
+    const dimensionModeMedia = window.matchMedia?.("(max-width: 640px)");
+    dimensionModeMedia?.addEventListener?.("change", refreshDimensionChartsForViewport);
+    let dimensionResizeTimer = null;
+    window.addEventListener("resize", () => {
+      window.clearTimeout(dimensionResizeTimer);
+      dimensionResizeTimer = window.setTimeout(refreshDimensionChartsForViewport, 120);
+    });
 
     document.querySelectorAll(".check-subject-item").forEach((button) => {
       button.addEventListener("click", () => {
