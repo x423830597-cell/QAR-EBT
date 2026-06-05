@@ -157,7 +157,7 @@
       color: #44546a;
       font-size: 12px;
       line-height: 1.25;
-      font-weight: 400;
+      font-weight: 600;
     }
 
     .block {
@@ -3668,6 +3668,31 @@
 
       .block {
         padding: 14px 10px;
+      }
+
+      .stage-card {
+        overflow-x: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #c9d9ec transparent;
+      }
+
+      .stage-card::-webkit-scrollbar {
+        height: 4px;
+      }
+
+      .stage-card::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      .stage-card::-webkit-scrollbar-thumb {
+        border-radius: 999px;
+        background: #c9d9ec;
+      }
+
+      .stage-chart {
+        width: 900px;
+        max-width: none;
+        flex: 0 0 auto;
       }
 
       .ebt-time-filter {
