@@ -725,6 +725,10 @@
       border-radius: 8px;
     }
 
+    .stage-chart-scroll {
+      overflow-x: visible;
+    }
+
     .stage-chart-grid {
       stroke: #edf2f7;
       stroke-width: 1;
@@ -3671,20 +3675,24 @@
       }
 
       .stage-card {
+        overflow-x: hidden;
+      }
+
+      .stage-chart-scroll {
         overflow-x: auto;
         scrollbar-width: thin;
         scrollbar-color: #c9d9ec transparent;
       }
 
-      .stage-card::-webkit-scrollbar {
+      .stage-chart-scroll::-webkit-scrollbar {
         height: 4px;
       }
 
-      .stage-card::-webkit-scrollbar-track {
+      .stage-chart-scroll::-webkit-scrollbar-track {
         background: transparent;
       }
 
-      .stage-card::-webkit-scrollbar-thumb {
+      .stage-chart-scroll::-webkit-scrollbar-thumb {
         border-radius: 999px;
         background: #c9d9ec;
       }
@@ -3845,7 +3853,8 @@
         <div class="stage-grid">
           <div class="stage-card">
             <h3>起飞阶段</h3>
-            <svg class="stage-chart" viewBox="0 0 900 245" role="img" aria-label="起飞阶段指标图">
+            <div class="stage-chart-scroll">
+              <svg class="stage-chart" viewBox="0 0 900 245" role="img" aria-label="起飞阶段指标图">
               <line class="stage-chart-grid" x1="76" y1="205.0" x2="870" y2="205.0" />
               <text class="stage-chart-y" x="54" y="208.0" text-anchor="end">-2</text>
               <line class="stage-chart-grid" x1="76" y1="181.6" x2="870" y2="181.6" />
@@ -3900,6 +3909,7 @@
               <text class="stage-chart-value" x="828" y="16.7" text-anchor="middle" fill="#aab8e8">5.8008</text>
               <text class="stage-chart-month" x="695" y="232" text-anchor="middle">2026-05</text>
             </svg>
+            </div>
             <div class="stage-metrics">
               <div class="stage-metric"><small>起飞抬轮变化率</small><strong>2.5684</strong><span>中位数 2.5430<br>标准差 0.2410</span></div>
               <div class="stage-metric missing"><small>起飞航向偏差</small><strong>暂无数据</strong><span>需核查参数采集<br>与QAR字段映射</span></div>
@@ -3910,7 +3920,8 @@
           </div>
           <div class="stage-card">
             <h3>着陆阶段</h3>
-            <svg class="stage-chart" viewBox="0 0 900 245" role="img" aria-label="着陆阶段指标图">
+            <div class="stage-chart-scroll">
+              <svg class="stage-chart" viewBox="0 0 900 245" role="img" aria-label="着陆阶段指标图">
               <line class="stage-chart-grid" x1="76" y1="205.0" x2="870" y2="205.0" />
               <text class="stage-chart-y" x="54" y="208.0" text-anchor="end">-2</text>
               <line class="stage-chart-grid" x1="76" y1="181.6" x2="870" y2="181.6" />
@@ -3965,6 +3976,7 @@
               <text class="stage-chart-value" x="828" y="78.3" text-anchor="middle" fill="#aab8e8">3.1641</text>
               <text class="stage-chart-month" x="695" y="232" text-anchor="middle">2026-05</text>
             </svg>
+            </div>
             <div class="stage-metrics">
               <div class="stage-metric missing"><small>最大俯仰变化率</small><strong>暂无数据</strong><span>暂无统计均值<br>暂无异常记录</span></div>
               <div class="stage-metric missing"><small>着陆航向偏差</small><strong>暂无数据</strong><span>暂无统计均值<br>暂无异常记录</span></div>
