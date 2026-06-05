@@ -3677,7 +3677,19 @@
 
       .ebt-time-trigger {
         width: 100%;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: max-content 1fr 12px;
+        justify-content: initial;
+        column-gap: 10px;
+        padding: 0 14px;
+      }
+
+      .ebt-time-value {
+        justify-self: center;
+      }
+
+      .ebt-time-trigger::after {
+        justify-self: end;
       }
 
       .ebt-time-menu {
