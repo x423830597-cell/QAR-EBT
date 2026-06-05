@@ -1645,7 +1645,7 @@
 
     .dimension-point-label {
       fill: #34455c;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 400;
     }
 
@@ -1657,11 +1657,13 @@
     .dimension-point-score.check {
       fill: #4b86f7;
       font-weight: 800;
+      font-size: 13px;
     }
 
     .dimension-point-score.train {
       fill: #33c27f;
       font-weight: 800;
+      font-size: 13px;
     }
 
     .dimension-mobile-bars {
@@ -2446,6 +2448,20 @@
       background: #fff;
     }
 
+    .check-subject-item::before {
+      content: "";
+      position: absolute;
+      top: 15px;
+      right: 16px;
+      z-index: 1;
+      display: none;
+      width: 6px;
+      height: 3px;
+      border-left: 1.6px solid #fff;
+      border-bottom: 1.6px solid #fff;
+      transform: rotate(-45deg);
+    }
+
     .check-subject-item.active {
       border-color: rgba(75, 134, 247, .45);
       background: #f2f7ff;
@@ -2462,17 +2478,16 @@
       height: 14px;
       top: 12px;
       right: 12px;
-      background-image: linear-gradient(45deg, transparent 45%, #fff 45% 56%, transparent 56%),
-        linear-gradient(-45deg, transparent 43%, #fff 43% 54%, transparent 54%);
-      background-size: 6px 9px, 10px 9px;
-      background-position: 3px 4px, 5px 2px;
-      background-repeat: no-repeat;
+    }
+
+    .check-subject-item.active::before {
+      display: block;
     }
 
     .check-subject-item b {
       display: block;
       color: #111827;
-      font-size: 12px;
+      font-size: 13px;
       margin-bottom: 7px;
     }
 
@@ -3542,7 +3557,7 @@
       }
 
       .dimension-point-label {
-        font-size: 12px;
+        font-size: 13px;
       }
 
       .dimension-point-modal-summary {
@@ -4415,10 +4430,6 @@
             </div>
           </div>
         </div>
-
-        <div class="ob-large" id="ob-summary-panels">
-        </div>
-        <!-- ob-large end marker for renderObSummaryPanels -->
 
         <div class="final">
           <b>总体评价：检查通过率稳定，胜任力表现需持续关注</b><br />
@@ -5308,7 +5319,7 @@
           label.setAttribute("text-anchor", "middle");
           // 标签从点上方开始
           const allTspans = label.querySelectorAll("tspan");
-          allTspans.forEach((t) => t.setAttribute("dy", "-18"));
+          allTspans.forEach((t) => t.setAttribute("dy", "-12"));
         });
       });
       card.dataset.spacingTightened = "true";

@@ -3,3 +3,4 @@ preview/
 *.claude-*-backup.html
 .DS_Store
 app-preview*.png
+preview-*.png
